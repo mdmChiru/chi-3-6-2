@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AboutSection() {
   return (
     <section id="about" className="px-6 py-16">
@@ -31,13 +33,13 @@ export default function AboutSection() {
         </p>
       </div>
 
-      {/* Ссылка пока ведёт на ещё не созданный маршрут /about (второй экран — фаза 4) */}
-      <a
+      {/* Второй экран /about реализован в фазе 4 */}
+      <Link
         href="/about"
         className="mt-8 inline-block rounded-lg border-2 border-amber-500 px-6 py-2.5 font-semibold text-amber-600 transition-colors hover:bg-amber-50"
       >
         Подробнее о компании
-      </a>
+      </Link>
     </section>
   );
 }
