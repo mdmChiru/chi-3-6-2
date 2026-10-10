@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { applicationSchema } from "@/lib/schema";
+import { saveApplication } from "@/lib/database";
 
 export async function POST(request: Request) {
   let payload: unknown;
@@ -24,6 +25,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ errors }, { status: 400 });
   }
 
-  // Сохранение заявки в базу будет добавлено в фазе 7
-  return NextResponse.json({ status: "success" }, { status: 200 });
+  // Сохраняем заявку в SQLite только после успешной валидации Zod
+  try {
+    const id = saveApplication(result.data);
+    return NextResponse.json({ status: "success", id }, { status: 200 });
+  } catch (error) {
+    // Ошибка БД не должна маскироваться под успех
+    console.error("Ошибка при сохранении заявки в БД:", error);
+    return NextResponse.json(
+      { error: "Не получилось сохранить заявку. Попробуйте ещё раз." },
+      { status: 500 },
+    );
+  }
 }
