@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vibe Venture
 
-## Getting Started
+Лендинг-сайт (MVP) для [Vibe Venture](https://example.com) — небольшой
+венчурной фирмы, которая помогает ИИ-стартапам на ранней стадии.
 
-First, run the development server:
+## О проекте
+
+Vibe Venture ищет команды с понятной проблемой, прототипом или MVP и может
+предоставить:
+
+- микрогрант;
+- продуктовую обратную связь;
+- помощь с упаковкой питча;
+- первые пилотные интро.
+
+Пользователи сайта — основатели ИИ-стартапов. Они должны понять предложение
+фирмы, открыть подробное описание компании и оставить заявку на первичный
+отбор. Заявка проходит проверку на клиенте и на сервере (Zod), сохраняется
+в локальную базу SQLite и может быть выгружена в CSV локальным Node.js-скриптом.
+
+> Текущее состояние: инициализация проекта (фаза 1). Главная страница
+> отображает заголовок Vibe Venture; форма, база данных и CSV-выгрузка
+> будут добавлены в следующих фазах.
+
+## Стек технологий
+
+- [Next.js](https://nextjs.org/) (App Router) — фреймворк
+- [React](https://react.dev/) — UI
+- [TypeScript](https://www.typescriptlang.org/) — типизация
+- [Tailwind CSS](https://tailwindcss.com/) — стили
+- Node.js — среда выполнения (в следующих фазах: Zod, SQLite, CSV-скрипт)
+
+## Требования
+
+- **Node.js 20.9.0 или новее** (LTS-версия рекомендована Next.js).
+- npm (устанавливается вместе с Node.js).
+
+Проверить версию:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Запуск проекта
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### macOS
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1. Перейти в каталог проекта
+cd vibe-venture-mvp
 
-## Learn More
+# 2. Установить зависимости
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# 3. Запустить dev-сервер
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Windows
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bat
+:: 1. Перейти в каталог проекта
+cd vibe-venture-mvp
 
-## Deploy on Vercel
+:: 2. Установить зависимости
+npm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+:: 3. Запустить dev-сервер
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Откройте в браузере [http://localhost:3000](http://localhost:3000) —
+на главной странице должен быть виден заголовок **Vibe Venture**.
+
+## Структура проекта
+
+```
+vibe-venture-mvp/
+├── src/
+│   ├── app/              # страницы (App Router): layout, главная страница
+│   │   ├── layout.tsx    # корневой layout
+│   │   ├── page.tsx      # главная страница (заглушка с заголовком Vibe Venture)
+│   │   └── globals.css   # глобальные стили (Tailwind CSS)
+│   ├── components/       # переиспользуемые компоненты (появятся позже)
+│   └── lib/              # схемы валидации, работа с базой, утилиты (появятся позже)
+├── public/               # статические файлы
+├── .gitignore
+├── next.config.ts        # конфигурация Next.js
+├── package.json
+├── tsconfig.json         # конфигурация TypeScript
+└── eslint.config.mjs     # конфигурация ESLint
+```
+
+## Скрипты
+
+| Команда         | Описание                          |
+| --------------- | --------------------------------- |
+| `npm run dev`   | Запуск dev-сервера (порт 3000)    |
+| `npm run build` | Продакшен-сборка                  |
+| `npm run start` | Запуск продакшен-сборки           |
+| `npm run lint`  | Проверка кода линтером (ESLint)   |

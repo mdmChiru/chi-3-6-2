@@ -33,9 +33,23 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# local databases (SQLite)
+*.db
+*.sqlite
+*.sqlite3
+/data
+
+# local CSV exports
+*.csv
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Custom ignores for this project
+.codeassistant/
+exercise/
+tetris-base.html
