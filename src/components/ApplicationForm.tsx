@@ -23,6 +23,7 @@ const initialValues: FormValues = {
 };
 
 const draftStorageKey = "vibe-venture-application-draft";
+const applyEndpoint = "/api/apply";
 
 const projectStages = [
   { value: "idea", label: "Идея" },
@@ -98,7 +99,10 @@ export default function ApplicationForm() {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [touched, setTouched] = useState<Partial<Record<keyof FormValues, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [showLocalSuccess, setShowLocalSuccess] = useState(false);
+  const [serverErrors, setServerErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   // Восстановление черновика при возврате на страницу (сохранение состояния при навигации).
@@ -130,7 +134,8 @@ export default function ApplicationForm() {
 
   const errors = validateAll(values);
   const errorFor = (field: keyof FormValues): string | undefined =>
-    touched[field] || submitted ? errors[field] : undefined;
+    (touched[field] || submitted ? errors[field] : undefined) ??
+    serverErrors[field];
 
   const handleChange = useCallback(
     (field: keyof FormValues) => (
@@ -140,17 +145,25 @@ export default function ApplicationForm() {
       setValues((prev) => ({ ...prev, [field]: value }));
       // Ошибка исчезает сразу, как только поле становится корректным
       if ((touched[field] || submitted) && !validateField(field, value)) {
-        setShowLocalSuccess(false);
+        setNetworkError(false);
+      }
+      // Серверная ошибка поля сбрасывается при правке поля
+      if (serverErrors[field]) {
+        setServerErrors((prev) => {
+          const next = { ...prev };
+          delete next[field];
+          return next;
+        });
       }
     },
-    [touched, submitted],
+    [touched, submitted, serverErrors],
   );
 
   const handleBlur = useCallback((field: keyof FormValues) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitted(true);
     setTouched({
@@ -162,11 +175,13 @@ export default function ApplicationForm() {
       demoUrl: true,
     });
 
-    const nextErrors = validateAll(values);
-    if (Object.keys(nextErrors).length > 0) {
-      setShowLocalSuccess(false);
+    const clientErrors = validateAll(values);
+    if (Object.keys(clientErrors).length > 0) {
+      setServerErrors({});
+      setNetworkError(false);
+      setShowSuccess(false);
       const firstErrorField = (
-        Object.keys(nextErrors) as Array<keyof FormValues>
+        Object.keys(clientErrors) as Array<keyof FormValues>
       )[0];
       formRef.current
         ?.querySelector<HTMLElement>(`[data-field="${firstErrorField}"]`)
@@ -174,8 +189,45 @@ export default function ApplicationForm() {
       return;
     }
 
-    // Отправка на сервер будет добавлена в фазе 6 (серверная валидация через Zod)
-    setShowLocalSuccess(true);
+    setIsSubmitting(true);
+    setNetworkError(false);
+    setServerErrors({});
+    setShowSuccess(false);
+
+    try {
+      const response = await fetch(applyEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const data = (await response.json()) as {
+        status?: string;
+        errors?: FormErrors;
+      };
+
+      if (response.ok && data.status === "success") {
+        // Успех показывается ТОЛЬКО после ответа сервера 200
+        setShowSuccess(true);
+      } else if (response.status === 400 && data.errors) {
+        // При 400 — показать ошибки у соответствующих полей, без успеха
+        setServerErrors(data.errors);
+        const firstErrorField = Object.keys(data.errors)[0] as
+          | keyof FormValues
+          | undefined;
+        if (firstErrorField && firstErrorField in initialValues) {
+          formRef.current
+            ?.querySelector<HTMLElement>(`[data-field="${firstErrorField}"]`)
+            ?.focus();
+        }
+      } else {
+        setNetworkError(true);
+      }
+    } catch {
+      // Сетевая ошибка
+      setNetworkError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputProps = (field: keyof FormValues) => {
@@ -340,9 +392,10 @@ export default function ApplicationForm() {
       <div className="mt-8 flex flex-col items-start gap-3">
         <button
           type="submit"
-          className="rounded-lg bg-amber-500 px-8 py-3 font-semibold text-neutral-900 transition-colors hover:bg-amber-400"
+          disabled={isSubmitting}
+          className="rounded-lg bg-amber-500 px-8 py-3 font-semibold text-neutral-900 transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Отправить заявку
+          {isSubmitting ? "Отправка…" : "Отправить заявку"}
         </button>
         <p className="text-xs text-neutral-500">
           Поля, отмеченные <span className="text-orange-500">*</span>,
@@ -350,12 +403,21 @@ export default function ApplicationForm() {
         </p>
       </div>
 
-      {submitted && showLocalSuccess && (
+      {submitted && networkError && (
+        <p
+          role="alert"
+          className="mt-6 rounded-lg border border-orange-300 bg-orange-50 px-4 py-3 text-sm font-medium text-orange-700"
+        >
+          Не получилось отправить заявку, попробуйте ещё раз.
+        </p>
+      )}
+
+      {submitted && showSuccess && !networkError && (
         <p
           role="status"
           className="mt-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-neutral-900"
         >
-          Данные прошли проверку. Отправка на сервер появится в следующей фазе.
+          Заявка успешно отправлена. Мы свяжемся с вами по указанному контакту.
         </p>
       )}
     </form>
