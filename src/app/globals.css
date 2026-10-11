@@ -1,21 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f5f5; /* светло-серый фон (neutral-100) */
-  --foreground: #171717;
+  /* Мягкий светлый фон вместо чистого белого */
+  --background: #f8f9fa;
+  /* Глубокий графитовый текст */
+  --foreground: #111827;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono);
+
+  /* Акцентная палитра: amber-* переопределена на насыщенный оранжевый */
+  --color-amber-50: #fff7ed;
+  --color-amber-100: #ffedd5;
+  --color-amber-200: #fed7aa;
+  --color-amber-300: #fdba74;
+  --color-amber-400: #fb923c;
+  --color-amber-500: #f97316;
+  --color-amber-600: #ea580c;
+  --color-amber-700: #c2410c;
 }
 
 /* Дизайн проекта — всегда светлый, тёмная схема не применяется */
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
 html {
@@ -24,5 +38,270 @@ html {
 
 /* Отступ при переходе по якорям, чтобы секции не уходили под шапку */
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 5rem;
+}
+
+::selection {
+  background: rgba(249, 115, 22, 0.25);
+}
+
+/* ---------- Утилиты дизайн-системы ---------- */
+
+/* Glassmorphism-панель: полупрозрачный белый + размытие («матовое стекло») */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+/* Основная CTA-кнопка: сплошная оранжевая подложка + мягкая тень */
+.btn-primary {
+  background-color: #f97316;
+  color: #ffffff;
+  box-shadow: 0 8px 20px -8px rgba(249, 115, 22, 0.6);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+.btn-primary:hover {
+  background-color: #ea580c;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -10px rgba(249, 115, 22, 0.7);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Ghost-кнопка с оранжевой обводкой */
+.btn-ghost {
+  border: 1.5px solid rgba(249, 115, 22, 0.6);
+  color: #ea580c;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+.btn-ghost:hover {
+  background: rgba(249, 115, 22, 0.08);
+  border-color: #f97316;
+  transform: translateY(-1px);
+}
+
+/* Чип (badge) с лёгким фоном */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.05);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.12);
+}
+.chip svg {
+  color: #f97316;
+  flex-shrink: 0;
+}
+
+/* Карточка с мягкой тенью и подъёмом при наведении */
+.card-lift {
+  border-radius: 1.25rem;
+  background: #ffffff;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 8px 24px -12px rgba(17, 24, 39, 0.12);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  border-color: rgba(249, 115, 22, 0.25);
+  box-shadow: 0 20px 40px -16px rgba(17, 24, 39, 0.18);
+}
+
+/* Ссылки навигации с плавным подчёркиванием */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #fb923c, #f97316);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.nav-link:hover {
+  color: #ea580c;
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Поля формы: явные, светло-серый фон, тонкая обводка, оранжевый фокус */
+.field {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: #111827;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.field::placeholder {
+  color: #9ca3af;
+}
+.field:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #f97316;
+  box-shadow: 0 0 0 4px rgba(254, 215, 170, 0.7); /* ring-2 ring-orange-200 */
+}
+.field-error {
+  border-color: #f97316;
+  background: #fff7ed;
+}
+.field-error:focus {
+  box-shadow: 0 0 0 4px rgba(254, 215, 170, 0.7);
+}
+
+/* ---------- Scroll-анимации (fade-in-up) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn-primary,
+  .btn-ghost,
+  .chip,
+  .card-lift,
+  .nav-link::after {
+    transition: none;
+  }
+}
+
+/* ---------- FAQ-аккордеон ---------- */
+.accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.accordion-panel.open {
+  grid-template-rows: 1fr;
+}
+.accordion-panel > div {
+  overflow: hidden;
+}
+
+/* ---------- Timeline сроков: единая линия с точками ---------- */
+.timeline {
+  position: relative;
+}
+/* Горизонтальная линия через весь блок (десктоп) */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0.75rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(249, 115, 22, 0.4),
+    rgba(249, 115, 22, 0.1)
+  );
+}
+/* Вертикальная линия слева (мобильные) */
+@media (max-width: 639px) {
+  .timeline::before {
+    top: 0;
+    bottom: 0;
+    left: 0.75rem;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(
+      180deg,
+      rgba(249, 115, 22, 0.4),
+      rgba(249, 115, 22, 0.1)
+    );
+  }
+}
+.timeline-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+@media (max-width: 639px) {
+  .timeline-step {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+/* Точка на линии */
+.timeline-dot {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 2px solid #f97316;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.timeline-step:hover .timeline-dot {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.18);
 }

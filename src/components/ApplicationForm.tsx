@@ -89,11 +89,7 @@ function validateAll(values: FormValues): FormErrors {
 }
 
 const fieldClassNames = (hasError: boolean) =>
-  `mt-1.5 w-full rounded-lg border-2 bg-white px-4 py-2.5 text-neutral-900 placeholder:text-neutral-400 transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500/40 ${
-    hasError
-      ? "border-orange-500 focus:border-orange-500"
-      : "border-neutral-200 focus:border-amber-500"
-  }`;
+  `field mt-1.5 ${hasError ? "field-error" : ""}`;
 
 export default function ApplicationForm() {
   const [values, setValues] = useState<FormValues>(initialValues);
@@ -261,7 +257,7 @@ export default function ApplicationForm() {
       ref={formRef}
       onSubmit={handleSubmit}
       noValidate
-      className="mt-8 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8"
+      className="mt-8 rounded-3xl border border-neutral-200/70 bg-white p-6 shadow-[0_24px_60px_-24px_rgba(17,24,39,0.18)] sm:p-10"
     >
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
@@ -393,12 +389,12 @@ export default function ApplicationForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-lg bg-amber-500 px-8 py-3 font-semibold text-neutral-900 transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-primary w-full rounded-lg px-6 py-3 text-lg font-semibold disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? "Отправка…" : "Отправить заявку"}
         </button>
-        <p className="text-xs text-neutral-500">
-          Поля, отмеченные <span className="text-orange-500">*</span>,
+        <p className="text-xs text-neutral-400">
+          Поля, отмеченные <span className="text-amber-600">*</span>,
           обязательны. Черновик сохраняется автоматически.
         </p>
       </div>

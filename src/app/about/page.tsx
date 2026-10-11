@@ -29,14 +29,18 @@ const principles = [
 
 export default function AboutPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-4xl font-bold tracking-tight text-neutral-900">
+    <main className="mx-auto max-w-5xl px-6 py-28">
+      <h1 className="text-5xl font-extrabold tracking-tight text-foreground">
         О&nbsp;
-        <span className="text-amber-500">Vibe Venture</span>
+        <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">
+          Vibe Venture
+        </span>
       </h1>
 
-      <section className="mt-8 space-y-4 text-neutral-700">
-        <h2 className="text-2xl font-bold text-neutral-900">Наша миссия</h2>
+      <section className="mt-10 max-w-3xl space-y-4 leading-relaxed text-neutral-600">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
+          Наша миссия
+        </h2>
         <p>
           Vibe Venture — небольшая венчурная фирма для ИИ-стартапов на ранней
           стадии. Наша миссия — дать командам с понятной проблемой и работающим
@@ -52,8 +56,8 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="mt-12 space-y-4 text-neutral-700">
-        <h2 className="text-2xl font-bold text-neutral-900">
+      <section className="mt-16 max-w-3xl space-y-4 leading-relaxed text-neutral-600">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Команда экспертов
         </h2>
         <p>
@@ -69,8 +73,8 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="mt-12 space-y-4 text-neutral-700">
-        <h2 className="text-2xl font-bold text-neutral-900">
+      <section className="mt-16 max-w-3xl space-y-4 leading-relaxed text-neutral-600">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Партнёрская сеть
         </h2>
         <p>
@@ -81,8 +85,8 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="mt-12 space-y-4 text-neutral-700">
-        <h2 className="text-2xl font-bold text-neutral-900">
+      <section className="mt-16 max-w-3xl space-y-4 leading-relaxed text-neutral-600">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Достижения и кейсы
         </h2>
         <p>
@@ -93,18 +97,20 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="mt-12">
-        <h2 className="text-2xl font-bold text-neutral-900">
+      <section className="mt-16">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Принципы работы с проектами
         </h2>
-        <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-          {principles.map((principle) => (
-            <li
-              key={principle.title}
-              className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm"
-            >
-              <h3 className="font-bold text-amber-600">{principle.title}</h3>
-              <p className="mt-2 text-sm text-neutral-700">
+        <ul className="mt-8 grid gap-6 sm:grid-cols-2">
+          {principles.map((principle, index) => (
+            <li key={principle.title} className="card-lift p-7">
+              <span className="text-sm font-bold text-amber-500">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-3 text-lg font-bold text-foreground">
+                {principle.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-600">
                 {principle.text}
               </p>
             </li>
@@ -112,19 +118,19 @@ export default function AboutPage() {
         </ul>
       </section>
 
-      <section className="mt-12 rounded-xl border border-amber-200 bg-amber-50 p-6 text-center">
-        <p className="font-semibold text-neutral-900">
+      <section className="mt-16 rounded-3xl border border-amber-500/25 bg-gradient-to-br from-amber-50 to-orange-50 p-8 text-center shadow-[0_20px_50px_-24px_rgba(249,115,22,0.4)]">
+        <p className="text-xl font-bold text-foreground">
           Хотите, чтобы мы посмотрели ваш проект?
         </p>
         <Link
           href="/#form"
-          className="mt-4 inline-block rounded-lg bg-amber-500 px-6 py-2.5 font-semibold text-neutral-900 transition-colors hover:bg-amber-400"
+          className="btn-primary mt-6 inline-block rounded-lg px-6 py-3 text-lg font-semibold"
         >
           Оставить заявку на первичный отбор
         </Link>
       </section>
 
-      <div className="mt-12">
+      <div className="mt-16">
         <BackButton />
       </div>
     </main>
