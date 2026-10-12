@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:show": "node -e \"const db=require('better-sqlite3')('data/applications.db');console.table(db.prepare('SELECT * FROM applications ORDER BY id').all())\""
+    "db:show": "node -e \"const db=require('better-sqlite3')('data/applications.db');console.table(db.prepare('SELECT * FROM applications ORDER BY id').all())\"",
+    "export:csv": "node scripts/export-applications.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",

@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
-import path from "node:path";
 import type { ApplicationData } from "@/lib/schema";
+import { dataDir, dbPath } from "../../scripts/db-path.mjs";
 
 /**
  * Конфигурация SQLite (better-sqlite3).
@@ -14,12 +14,13 @@ import type { ApplicationData } from "@/lib/schema";
  * в клиентские компоненты.
  */
 
-// Файл БД лежит в data/ (в .gitignore) и не коммитится
-const dataDir = path.join(process.cwd(), "data");
+// Файл БД лежит в data/ (в .gitignore) и не коммитится.
+// Пути берутся из общего модуля scripts/db-path.mjs — тот же путь
+// использует скрипт CSV-выгрузки (scripts/export-applications.mjs).
 fs.mkdirSync(dataDir, { recursive: true });
 
 // Один экземпляр подключения на процесс
-const db = new Database(path.join(dataDir, "applications.db"));
+const db = new Database(dbPath);
 
 // WAL — быстрые записи и чтение без блокировок
 db.pragma("journal_mode = WAL");

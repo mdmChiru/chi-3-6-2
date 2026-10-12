@@ -42,6 +42,9 @@ yarn-error.log*
 # local CSV exports
 *.csv
 
+# локальные тестовые данные (не коммитятся)
+test-*.json
+
 # vercel
 .vercel
 
