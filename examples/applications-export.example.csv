@@ -1,0 +1,16 @@
+﻿id,name,contact,project_name,project_stage,problem_description,demo_link,created_at
+1,Иван Иванов,ivan@example.com,CodeReview AI,mvp,Команды тратят часы на ручное код-ревью рутинных изменений в коде.,https://github.com/team/project,2026-10-10 15:25:40
+2,Иван Иванов,ivan@example.com,CodeReview AI,mvp,Команды тратят часы на ручное код-ревью рутинных изменений в коде.,https://github.com/team/project,2026-10-10 15:25:40
+3,Черкасова Ирина Юрьевна,madam.Chiru@yandex.ru,Vibe Venture,idea,Лендинг-сайт (MVP) для Vibe Venture,,2026-10-10 15:33:35
+4,Черкасова Ирина Юрьевна,madam.Chiru@yandex.ru,Vibe Venture,idea,Лендинг-сайт (MVP) для Vibe Venture,,2026-10-10 15:34:09
+5,Черкасова Ирина Юрьевна,madam.Chiru@yandex.ru,Vibe Venture,mvp,Лендинг-сайт (MVP) для Vibe Venture,,2026-10-10 15:34:16
+6,"Тест, Запятая",test@example.com,"Escaping ""Test"" Project",idea,"Проблема с запятой, кавычкой "" и переносом строки.
+Вторая строка описания.",,2026-10-12 03:42:40
+7,Иван Иванов,ivan@example.com,CodeReview AI,mvp,Команды тратят часы на ручное код-ревью рутинных изменений в коде.,https://github.com/team/project,2026-10-12 03:56:45
+8,Черкасова Ирина Юрьевна,madam.Chiru@yandex.ru,Vibe Venture,prototype,"Пользователи сайта — основатели ИИ-стартапов. Они должны понять предложение
+фирмы, открыть подробное описание компании и оставить заявку на первичный
+отбор.",,2026-10-12 04:05:19
+9,????,ivan@example.com,TestAI,mvp,???????? ????????? ?????????,,2026-10-12 05:15:27
+10,Иван,ivan@example.com,TestAI,mvp,Проверка UTF-8 в PowerShell,,2026-10-12 05:18:48
+11,Анна Смирнова,anna.smirnova@example.com,NeuroCoach,idea,Студентам сложно повторять материал перед экзаменами: нейросеть собирает конспекты и вопросы по лекциям курса.,https://github.com/neurocoach/demo,2026-10-18 04:44:02
+12,Дмитрий Петров,@dmitry_petrov,SalesPulse AI,mvp,"Отделам продаж сложно вести базу клиентов вручную: ассистент размечает сделки и подсказывает, кому позвонить первым.",https://github.com/salespulse-ai/demo,2026-10-18 04:44:02

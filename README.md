@@ -114,6 +114,8 @@ vibe-venture-mvp/
 │   ├── db-path.d.mts           # декларация типов для db-path.mjs
 │   └── export-applications.mjs # CSV-выгрузка заявок
 ├── public/                     # статические файлы
+├── examples/                   # пример выгрузки CSV (коммитится в репозиторий)
+│   └── applications-export.example.csv
 ├── .gitignore
 ├── next.config.ts              # конфигурация Next.js
 ├── package.json
@@ -194,7 +196,9 @@ npm run export:csv
 
 - Файл выгрузки: `data/applications-export.csv` (путь задан в
   [`scripts/db-path.mjs`](scripts/db-path.mjs); файл перезаписывается при
-  каждом запуске; каталог `data/` и `*.csv` в `.gitignore` — файл не коммитится).
+  каждом запуске; каталог `data/` и правило `*.csv` в `.gitignore` — файл
+  не коммитится; исключение — каталог `examples/` с примером выгрузки,
+  см. раздел «Пример выгрузки» ниже).
 - Скрипт: [`scripts/export-applications.mjs`](scripts/export-applications.mjs).
 - БД открывается в read-only режиме — не мешает работающему dev-серверу.
 - Формат: UTF-8 с BOM (корректно открывается в Excel на Windows и macOS),
@@ -224,6 +228,31 @@ npm run export:csv
 4. Убедитесь, что строка с вашей заявкой на месте, все поля заполнены,
    а русский текст отображается без «кракозябр» (BOM гарантирует корректную
    кодировку).
+
+### Пример выгрузки
+
+Пример результата CSV-выгрузки лежит в репозитории:
+[`examples/applications-export.example.csv`](examples/applications-export.example.csv).
+
+Как он создан:
+
+1. Через форму на http://localhost:3000/#form отправлены 2 тестовые заявки
+   (прошли клиентскую и серверную валидацию и сохранились в SQLite).
+2. Выполнена команда `npm run export:csv`.
+3. Файл `data/applications-export.csv` скопирован в `examples/` с суффиксом
+   `.example`.
+
+В отличие от `data/` и прочих `*.csv`, каталог `examples/` не игнорируется
+(в `.gitignore` добавлено исключение `!examples/*.csv`), поэтому пример
+можно открыть ещё до запуска проекта:
+
+- **macOS:** `open examples/applications-export.example.csv`
+- **Windows:** `start examples\applications-export.example.csv`
+
+В примере 12 строк: 10 заявок из локальной базы предыдущих проверок и
+2 новые тестовые заявки. Файл демонстрирует и экранирование по RFC 4180:
+значения с запятыми, кавычками или переносами строк обёрнуты в двойные
+кавычки (например, заявка «Тест, Запятая» с кавычками в названии проекта).
 
 ## Проверка end-to-end
 
