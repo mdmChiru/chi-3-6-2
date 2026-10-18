@@ -119,9 +119,15 @@ export default function ApplicationForm() {
     return () => window.clearTimeout(timer);
   }, []);
 
-  // Сохранение черновика при каждом изменении
+  // Сохранение черновика при каждом изменении.
+  // После успешной отправки поля очищаются — пустой черновик в localStorage
+  // не храним, иначе он перезапишет удаление и «воскреснет» после обновления.
   useEffect(() => {
     try {
+      if (JSON.stringify(values) === JSON.stringify(initialValues)) {
+        window.localStorage.removeItem(draftStorageKey);
+        return;
+      }
       window.localStorage.setItem(draftStorageKey, JSON.stringify(values));
     } catch {
       // localStorage недоступен — не критично
@@ -204,6 +210,17 @@ export default function ApplicationForm() {
       if (response.ok && data.status === "success") {
         // Успех показывается ТОЛЬКО после ответа сервера 200
         setShowSuccess(true);
+        // После успешной отправки очищаем форму и удаляем черновик,
+        // чтобы при возврате на страницу не показывались данные отправленной заявки
+        setValues(initialValues);
+        setTouched({});
+        setSubmitted(false);
+        setServerErrors({});
+        try {
+          window.localStorage.removeItem(draftStorageKey);
+        } catch {
+          // localStorage недоступен — не критично
+        }
       } else if (response.status === 400 && data.errors) {
         // При 400 — показать ошибки у соответствующих полей, без успеха
         setServerErrors(data.errors);
@@ -408,7 +425,7 @@ export default function ApplicationForm() {
         </p>
       )}
 
-      {submitted && showSuccess && !networkError && (
+      {showSuccess && !networkError && (
         <p
           role="status"
           className="mt-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-neutral-900"
