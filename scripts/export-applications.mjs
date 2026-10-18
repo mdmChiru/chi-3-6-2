@@ -7,6 +7,8 @@ import { dataDir, dbPath, csvPath } from "./db-path.mjs";
  * Запуск: npm run export:csv
  *
  * - БД открывается в read-only режиме, чтобы не мешать работающему dev-серверу;
+ * - если файла БД ещё нет (сервер ни разу не запускался) — создаётся файл
+ *   только с заголовками, ошибкой скрипт не завершается;
  * - строки сортируются по id ASC;
  * - файл перезаписывается при каждом запуске;
  * - UTF-8 с BOM (\uFEFF) — корректное открытие в Excel на Windows и macOS;
@@ -47,20 +49,21 @@ function toCsv(rows) {
 }
 
 let db;
+let rows = [];
 try {
   if (!fs.existsSync(dbPath)) {
-    throw new Error(
-      `Файл БД не найден: ${dbPath}. Сначала запустите сервер (npm run dev) и отправьте заявку.`,
-    );
+    // БД ещё не создана — сервер ни разу не запускался, заявок пока нет
+    console.log("База SQLite ещё не создана (сервер ни разу не запускался).");
+  } else {
+    // read-only: не блокируем и не изменяем БД работающего сервера
+    db = new Database(dbPath, { readonly: true });
+
+    rows = db
+      .prepare("SELECT * FROM applications ORDER BY id ASC")
+      .all();
   }
 
-  // read-only: не блокируем и не изменяем БД работающего сервера
-  db = new Database(dbPath, { readonly: true });
-
-  const rows = db
-    .prepare("SELECT * FROM applications ORDER BY id ASC")
-    .all();
-
+  // CSV создаётся в обоих случаях: с заявками или только с заголовками
   fs.mkdirSync(dataDir, { recursive: true });
   // BOM в начале файла — чтобы Excel корректно определил UTF-8
   fs.writeFileSync(csvPath, "\uFEFF" + toCsv(rows), "utf8");
